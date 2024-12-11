@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vic AOC Solutions</title>
+    <script src="https://cdn.jsdelivr.net/npm/pyodide@0.21.3/pyodide.js"></script>
+    <link rel="icon" href="icon.ico" type="image/x-icon">
+    <style>
+        /* Mise à jour du design */
+        body {
+            font-family: 'Times New Roman', monospace;
+            margin: 0;
+            padding: 0;
+            background: #1a202c;
+            color: #e2e8f0;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://source.unsplash.com/random/1920x1080/?stars,galaxy') no-repeat center;
+            background-size: cover;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2d3748;
+            padding: 15px 30px;
+            border-bottom: 2px solid #01b9aa;
+        }
+
+        .nav-link {
+            color: #63b3ed;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: color 0.3s, transform 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #ff9f00;
+            transform: scale(1.1);
+            text-decoration: underline;
+        }
+
+        .container {
+            padding: 50px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            color: #01b9aa;
+            text-shadow: 0px 4px 15px rgba(99, 179, 237, 0.8);
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: flex-start;
+            gap: 40px;
+        }        
+        
+        .input-section {
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            border: 2px solid #63b3ed;
+            border-radius: 10px;
+            width: 40%;
+            min-height: 400px;
+            text-align: center;
+            background: #2d3748;
+            box-shadow: 0 4px 10px rgba(99, 179, 237, 0.2);
+        }
+        #output{
+            font-family: 'Times New Roman', Times, serif;
+            font-size:xx-large;
+            font-weight: bolder;
+            color: red;
+        }
+        .date-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .compact-input {
+            width: 100px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #63b3ed;
+            background: #1a202c;
+            color: #e2e8f0;
+        }
+
+        .drop-zone {
+            margin-top: 20px;
+            background: #1a202c;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #a0aec0;
+            cursor: pointer;
+            border: 2px dashed #63b3ed;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #63b3ed;
+            background: #1a202c;
+            color: #e2e8f0;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            color: #1a202c;
+            background: #63b3ed;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #4299e1;
+            transform: translateY(-3px);
+        }
+
+        .output-section {
+            width: 50%;
+            min-height: 400px;
+            text-align: left;
+            background: #2d3748;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(99, 179, 237, 0.3);
+        }
+        .custom-file {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+          }
+          .custom-file input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+          }
+          .custom-file label {
+            display: inline-block;
+            background-color: white;
+            color: black;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+        .output-header {
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            color: #63b3ed;
+        }
+
+        #inputFile::file-selector-button {
+            background: #63b3ed;
+            color: #1a202c;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #inputFile::file-selector-button:hover {
+            background: #4759e8;
+        }
+
+        #inputFile {
+            font-size: 1rem;
+            color: #e2e8f0;
+            margin-top: 10px;
+        }
+        
+        .input-section, .output-section {
+            align-self: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+
+    <nav class="top-nav">
+        <a href="https://adventofcode.com" class="nav-link">Advent of Code Official</a>
+        <a href="https://github.com/Vic-Nas/Advent-of-code-python" id="pythonFilesBtn" class="nav-link">Python Files</a>
+    </nav>
+
+    <div class="container">
+        <h1>Advent of Code Solutions</h1>
+
+        <div class="content-wrapper">
+            <div class="input-section">
+                <div class="date-container">
+                    <input type="number" id="yearInput" class="compact-input" placeholder="Year" min="2015" max="3000">
+                    <input type="number" id="dayInput" class="compact-input" placeholder="Day" min="1" max="25">
+                </div>
+                <br>
+                    <button id="py">Download python file</button>
+                <br>
+                <div class="drop-zone" id="dropZone">
+                    Drag and drop input.txt or choose input file:
+                    <div class="custom-file">
+                        <label for="inputFile">Select Input file</label>
+                        <input type="file" id="inputFile" accept=".txt">
+                      </div>
+                    <textarea id="pasteInput" placeholder="Paste input"></textarea>
+                </div>
+                <button id="runButton">Run</button>
+            </div>
+
+            <div class="output-section">
+                <div class="output-header">Results</div>
+                <div id="output">Output</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Obtenir la date actuelle
+        const today = new Date();
+        
+        // Remplir l'année
+        document.getElementById('yearInput').value = today.getFullYear();
+        
+        // Remplir le jour du mois
+        document.getElementById('dayInput').value = today.getDate();
+        let pyodide;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            pyodide = await loadPyodide();
+            console.log("Ready.");
+        });
+
+        const yearInput = document.getElementById('yearInput');
+        const dayInput = document.getElementById('dayInput');
+        const inputFile = document.getElementById('inputFile');
+        const pasteInput = document.getElementById('pasteInput');
+        const dropZone = document.getElementById('dropZone');
+        const runButton = document.getElementById('runButton');
+        const outputDiv = document.getElementById('output');
+        const py = document.getElementById('py');
+        let fileContent = "";
+
+        // Gestion de l'importation et du drag-and-drop
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                readFile(file);
+            }
+        });
+
+        inputFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                readFile(file);
+            }
+        });
+
+        function readFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                fileContent = e.target.result;
+                pasteInput.value = fileContent;
+            };
+            reader.readAsText(file);
+        }
+
+        // Récupération du script depuis GitHub
+        async function fetchScriptFromGitHub(year, day) {
+            const paddedDay = String(day).padStart(2, '0');
+            const url = `https://api.github.com/repos/Vic-Nas/Advent-of-code-python/contents/${year}/${paddedDay}_${year}.py`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Script not found on GitHub.');
+                }
+                const data = await response.json();
+                return atob(data.content); // Décodage Base64
+            } catch (error) {
+                throw new Error(`While getting the script : ${error.message}`);
+            }
+        }
+
+        // Exécution locale avec Pyodide
+        py.addEventListener('click', async () => {
+    const year = yearInput.value;
+    const day = dayInput.value;
+
+    if (!year || !day) {
+        alert("Year and Day are required to fetch the script.");
+        return;
+    }
+
+    try {
+        // Récupérer le script depuis GitHub
+        const script = await fetchScriptFromGitHub(year, day);
+
+        // Créer un Blob contenant le script Python
+        const blob = new Blob([script], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `vic_aoc_${year}_day_${day}.py`; // Nom du fichier
+        link.click(); // Télécharger le fichier
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+});
+        runButton.addEventListener('click', async () => {
+            const year = yearInput.value;
+            const day = dayInput.value;
+            const input = pasteInput.value.trim() || fileContent;
+
+            if (!year || !day || !input) {
+                alert("Input missing");
+                return;
+            }
+
+            outputDiv.textContent = "Running";
+
+            try {
+                // Récupérer le script depuis GitHub
+                const script = await fetchScriptFromGitHub(year, day);
+
+                // Rediriger l'output vers une variable Python en utilisant StringIO
+                const result = await pyodide.runPythonAsync(`
+
+from io import StringIO
+import sys
+def tqdm(iterable, desc = ""): return list(iterable)
+
+# Rediriger stdout pour capturer les sorties
+sys.stdout = StringIO()
+
+# Input
+input_content = """${input.replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\n/g, "\\n")}"""
+
+# Remplacer l'utilisation explicite de 'input.txt' dans le script par 'input_content'
+def open(file, mode='r', *args, **kwargs):
+    if file == 'input.txt':
+        return StringIO(input_content)
+    raise FileNotFoundError(f"No such file: {file}")
+
+# Script téléchargé depuis GitHub
+${script}
+
+# Capturer la sortie
+output = sys.stdout.getvalue()
+
+output
+                `);
+
+                // Afficher le résultat
+                outputDiv.innerHTML = (result || "Script successfully run.").replace(/\n/g, "<br/><br/>");
+            } catch (error) {
+                outputDiv.textContent = `Bad input`;
+            }
+        });
+    </script>
+</body>
+</html>
