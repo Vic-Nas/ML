@@ -223,7 +223,7 @@
                     <button id="py">Download python file</button>
                 <br>
                 <div class="drop-zone" id="dropZone">
-                    Drag and drop input.txt or click below:
+                    Drag and drop input.txt or choose input file:
                     <div class="custom-file">
                         <label for="inputFile">Choose Input file</label>
                         <input type="file" id="inputFile" accept=".txt">
@@ -336,7 +336,7 @@
         const blob = new Blob([script], { type: 'text/plain' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `${year}_${String(day).padStart(2, '0')}_${year}.py`; // Nom du fichier
+        link.download = `vic_aoc_${year}_day_${day}.py`; // Nom du fichier
         link.click(); // Télécharger le fichier
     } catch (error) {
         alert(`Error: ${error.message}`);
