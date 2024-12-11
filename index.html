@@ -301,7 +301,7 @@
         // Récupération du script depuis GitHub
         async function fetchScriptFromGitHub(year, day) {
             const paddedDay = String(day).padStart(2, '0');
-            const url = `https://api.github.com/repos/Vic-Nas/Advent_of_code_python/contents/${year}/${paddedDay}_${year}.py`;
+            const url = `https://api.github.com/repos/Vic-Nas/Advent-of-code-python/contents/${year}/${paddedDay}_${year}.py`;
 
             try {
                 const response = await fetch(url);
