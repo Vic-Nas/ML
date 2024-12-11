@@ -196,7 +196,7 @@
             color: #e2e8f0;
             margin-top: 10px;
         }
-
+        
         .input-section, .output-section {
             align-self: center;
         }
@@ -206,8 +206,8 @@
     <div class="stars"></div>
 
     <nav class="top-nav">
-        <a href="https://adventofcode.com" target="_blank" class="nav-link">Advent of Code Official</a>
-        <a href="https://github.com/Vic-Nas/Advent_of_code_python" id="pythonFilesBtn" class="nav-link">Python Files</a>
+        <a href="https://adventofcode.com" class="nav-link">Advent of Code Official</a>
+        <a href="https://github.com/Vic-Nas/Advent-of-code-python" id="pythonFilesBtn" class="nav-link">Python Files</a>
     </nav>
 
     <div class="container">
@@ -218,6 +218,7 @@
                 <div class="date-container">
                     <input type="number" id="yearInput" class="compact-input" placeholder="Year" min="2015" max="3000">
                     <input type="number" id="dayInput" class="compact-input" placeholder="Day" min="1" max="25">
+                    <button id = "py">Download python file</button>
                 </div>
                 <div class="drop-zone" id="dropZone">
                     Drag and drop input.txt or click below:
@@ -261,6 +262,7 @@
         const dropZone = document.getElementById('dropZone');
         const runButton = document.getElementById('runButton');
         const outputDiv = document.getElementById('output');
+        const py = document.getElementById('py');
         let fileContent = "";
 
         // Gestion de l'importation et du drag-and-drop
@@ -316,6 +318,29 @@
         }
 
         // Exécution locale avec Pyodide
+        py.addEventListener('click', async () => {
+    const year = yearInput.value;
+    const day = dayInput.value;
+
+    if (!year || !day) {
+        alert("Year and Day are required to fetch the script.");
+        return;
+    }
+
+    try {
+        // Récupérer le script depuis GitHub
+        const script = await fetchScriptFromGitHub(year, day);
+
+        // Créer un Blob contenant le script Python
+        const blob = new Blob([script], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${year}_${String(day).padStart(2, '0')}_${year}.py`; // Nom du fichier
+        link.click(); // Télécharger le fichier
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+});
         runButton.addEventListener('click', async () => {
             const year = yearInput.value;
             const day = dayInput.value;
