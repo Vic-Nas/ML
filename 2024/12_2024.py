@@ -48,7 +48,6 @@ with open("input.txt") as fd:
                         if not is_same((x, y), (px, py)) or is_same((px, py), (pnx, pny)):
                             sides += 1
 
-            print(data[i][j], area, perimeter)
             score += area * perimeter
             score1 += area * sides
 
