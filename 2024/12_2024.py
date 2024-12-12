@@ -1,53 +1,60 @@
 #Mine was too slow and too long again
 
-import numpy as np
 with open("input.txt") as fd:
     _data = [i.strip() for i in fd.readlines()]
-    
-    data = np.array([[j for j in i] for i in _data])
-    visited = np.zeros_like(data, dtype=bool)
+
+    data = [[j for j in i] for i in _data]
+    rows, cols = len(data), len(data[0])
+
+    visited = [[False for _ in range(cols)] for _ in range(rows)]
+
     score = 0
     score1 = 0
+
     def is_same(x, y):
         i, j = x
         k, l = y
-        return 0 <= i < data.shape[0] and 0 <= j < data.shape[1] and 0 <= k < data.shape[0] and 0 <= l < data.shape[1] and data[i, j] == data[k, l]
-            
-        
-    for i in range(data.shape[0]):
-        for j in range(data.shape[1]):
-            if visited[i, j]:
+        return 0 <= i < rows and 0 <= j < cols and 0 <= k < rows and 0 <= l < cols and data[i][j] == data[k][l]
+
+    for i in range(rows):
+        for j in range(cols):
+            if visited[i][j]:
                 continue
-            lv = np.zeros_like(data, dtype=bool)
+
+            lv = [[False for _ in range(cols)] for _ in range(rows)]
             q = [(i, j)]
-            perimiter = 0
+            perimeter = 0
             area = 0
             sides = 0
 
-            while len(q) > 0:
+            while q:
                 x, y = q.pop(0)
-                if lv[x, y] or visited[x, y]:
+                if lv[x][y] or visited[x][y]:
                     continue
 
                 area += 1
-                visited[x, y] = True
-                lv[x, y] = True
+                visited[x][y] = True
+                lv[x][y] = True
+
                 for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
                     nx, ny = x + dx, y + dy
                     px, py = x + dy, y - dx
                     pnx, pny = px + dx, py + dy
+
                     if is_same((x, y), (nx, ny)):
                         q.append((nx, ny))
                     else:
-                        perimiter += 1
+                        perimeter += 1
                         if not is_same((x, y), (px, py)) or is_same((px, py), (pnx, pny)):
                             sides += 1
-                    
 
-                        
-            print(data[i, j], area, perimiter)
-            score += area * perimiter
+            print(data[i][j], area, perimeter)
+            score += area * perimeter
             score1 += area * sides
-            visited |= lv
+
+            for r in range(rows):
+                for c in range(cols):
+                    visited[r][c] = visited[r][c] or lv[r][c]
+
     print(score)
     print(score1)
