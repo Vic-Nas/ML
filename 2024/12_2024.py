@@ -54,6 +54,7 @@ with open("input.txt") as fd:
             for r in range(rows):
                 for c in range(cols):
                     visited[r][c] = visited[r][c] or lv[r][c]
-
+    print()
     print(score)
     print(score1)
+    print()
