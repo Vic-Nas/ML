@@ -6,7 +6,7 @@ cut2 = lambda s: int(s[2:])
 def check(inp, error = 0):
     i = 0
     res = []
-    while i + 4 < len(inp):
+    while i < len(inp):
         data = {"A": tuple(map(cut2, inp[i][10:].split(", "))), 
                 "B": tuple(map(cut2, inp[i + 1][10:].split(", "))), 
                 "P": tuple(map(cut2, inp[i + 2][7:].split(", ")))}
