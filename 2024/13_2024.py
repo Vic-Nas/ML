@@ -17,6 +17,7 @@ def check(inp, error = 0):
 
 inp = list(map(str.strip, open("input.txt", "r").readlines()))
 prize = lambda t: 3 * t[0] + t[1]
+inf100 = lambda t: t[0] <= 100 and t[1] <= 100
 
-print("\nPart1:", sum(prize(tup) for tup in filter(lambda t: t[0] <= 100 and t[1] <= 100, check(inp))))
+print("\nPart1:", sum(prize(tup) for tup in filter(inf100, check(inp))))
 print("Part2:", sum(prize(tup) for tup in check(inp, 10 ** 13)), "\n")
