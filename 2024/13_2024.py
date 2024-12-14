@@ -3,7 +3,7 @@ cut2 = lambda s: int(s[2:])
 def check(inp, error = 0):
     i = 0; res = []
     while i < len(inp):
-        data = {"A": tuple(map(cut2, inp[i][10:].split(", "))), 
+        data = {"A": tuple(map(cut2, inp[i][10:].split(", "))),
                 "B": tuple(map(cut2, inp[i + 1][10:].split(", "))), 
                 "P": tuple(map(cut2, inp[i + 2][7:].split(", ")))}
         den = data["A"][0] * data["B"][1] - data["B"][0] * data["A"][1]
@@ -11,7 +11,7 @@ def check(inp, error = 0):
         if den:
             a = (data["P"][0] + error) * data["B"][1] - (data["P"][1] + error) * data["B"][0]
             b = (data["P"][1] + error) * data["A"][0] - (data["P"][0] + error) * data["A"][1]
-            if den and not a % den and not b % den: res.append((a // den, b // den))
+            if not (a % den or b % den): res.append((a // den, b // den))
         i += 4
     return res
 
