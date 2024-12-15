@@ -364,6 +364,10 @@
 
 from io import StringIO
 import sys
+import micropip
+await micropip.install('matplotlib')
+await micropip.install('numpy')
+await micropip.install('tqdm')
 def tqdm(iterable, desc = ""): return list(iterable)
 
 # Rediriger stdout pour capturer les sorties
@@ -390,7 +394,7 @@ output
                 // Afficher le résultat
                 outputDiv.innerHTML = (result || "Script successfully run.").replace(/\n/g, "<br/><br/>");
             } catch (error) {
-                outputDiv.textContent = `Bad input`;
+                outputDiv.textContent = `${error}`;
             }
         });
     </script>
