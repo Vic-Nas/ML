@@ -256,6 +256,7 @@
             pyodide = await loadPyodide();
             await pyodide.loadPackage('matplotlib')
             await pyodide.loadPackage('numpy')
+            await pyodide.loadPackage('sys')
             console.log("Ready.");
         });
 
@@ -365,6 +366,7 @@
                 const result = await pyodide.runPythonAsync(`
 
 from io import StringIO
+import sys
 # Rediriger stdout pour capturer les sorties
 sys.stdout = StringIO()
 
