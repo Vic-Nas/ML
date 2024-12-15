@@ -37,7 +37,7 @@ seen_positions = {p for p, _ in seen_positions_directions}
 print(f"\nPart1: {len(seen_positions) + 1}")
 loopies = 1
 
-for i in range(0, len(grid)), desc = "Part2":
+for i in range(0, len(grid)):
     for j in range(0, len(grid[0])):
         if (i, j) not in seen_positions:
             continue
