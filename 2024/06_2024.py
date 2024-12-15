@@ -2,7 +2,7 @@
 # Mine was too slow
 
 grid = []
-from tqdm import tqdm
+#from tqdm import tqdm
 def rotate(_direction):
     return _direction[1], -_direction[0]
 
