@@ -1,34 +1,60 @@
-def look_like_sapin(points, hauteur=103, largeur=101):
-    # Axe central (le centre des colonnes)
-    axe_central = largeur // 2
+Empty = "."
+Robot = "R"
+Obstacle = "#"
 
-    # Organiser les points par ligne
-    points_par_ligne = {ligne: [] for ligne in range(hauteur)}
-    for x, y in points:
-        points_par_ligne[x].append(y)
+the_map, moves = "".join(open("input.txt", "r").readlines()).split("\n\n")
+the_map = list(map(lambda row: list(row[1:-1]), the_map.split("\n")[1:-1]))
 
-    # Parcourir les lignes pour trouver une structure triangulaire
-    for ligne in range(hauteur - 2):  # -2 car on vérifie 3 lignes successives
-        # Obtenir les points pour les 3 lignes successives
-        ligne1 = sorted(points_par_ligne[ligne])
-        ligne2 = sorted(points_par_ligne[ligne + 1])
-        ligne3 = sorted(points_par_ligne[ligne + 2])
+end = False
+for i in range(len(the_map)):
+    for j in range(len(the_map[i])):
+        if the_map[i][j] == '@': 
+            the_map[i][j] = Robot
+            x = i; y = j
+            end = True
+            break
+    if end: break
 
-        # Vérifier que chaque ligne a respectivement 1, 3, et 5 points
-        if len(ligne1) == 1 and len(ligne2) == 3 and len(ligne3) == 5:
-            # Vérifier la symétrie autour de l'axe central
-            if (ligne1[0] == axe_central and
-                ligne2[0] == axe_central - 1 and ligne2[2] == axe_central + 1 and
-                ligne3[0] == axe_central - 2 and ligne3[4] == axe_central + 2):
-                return True
 
-    # Si aucun motif pyramidale n'a été trouvé
-    return False
+def transpose2D(matrix): return [list(row) for row in zip(*matrix)]
+def display(the_map): 
+    new = Obstacle * (len(the_map[0]) + 2)
+    print(new)
+    print("\n".join(Obstacle + "".join(row) + Obstacle for row in the_map))
+    print(new)
 
-points = [
-    (0, 50),           # Ligne 0 : *
-    (1, 49), (1, 50), (1, 51),  # Ligne 1 : ***
-    (2, 48), (2, 49), (2, 50), (2, 51), (2, 52)  # Ligne 2 : *****
-]
 
-print(look_like_sapin(points))  # True
+def fd(sense, x, y):
+    global the_map
+    safe = the_map[x].copy()
+    try:
+        if sense == ">":
+            index = the_map[x][y + 1:].index(Empty) + y + 1
+            for j in range(index, y, -1): 
+                if the_map[x][j] != Obstacle: the_map[x][j] = the_map[x][j - 1]
+                else: the_map[x] = safe; break
+            else: the_map[x][y] = Empty; y += 1
+        elif sense == "<":
+            the_map = transpose2D(transpose2D(the_map)[::-1])
+            x, y = fd(">", x, len(the_map[x]) - 1 - y)
+            y = len(the_map[x]) - y - 1
+            the_map = transpose2D(transpose2D(the_map)[::-1])
+        else:
+            the_map = transpose2D(the_map)
+            y, x = fd("<" if sense == "^" else ">", y, x)
+            the_map = transpose2D(the_map)
+    except: pass
+    return x, y
+
+
+for i, move in enumerate(moves): 
+    x, y = fd(move, x, y)
+    print(f"After Move {i + 1} ({move}):")
+    display(the_map)
+    print("\n" + "=" * 20 + "\n")
+
+res = 0
+for i in range(len(the_map)):
+    for j in range(len(the_map[i])):
+        if the_map[i][j] == "O": res += 100 * (i + 1) + j + 1
+print(res)
