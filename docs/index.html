@@ -254,6 +254,8 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             pyodide = await loadPyodide();
+            await pyodide.loadPackage('matplotlib')
+            await pyodide.loadPackage('numpy')
             console.log("Ready.");
         });
 
@@ -363,13 +365,6 @@
                 const result = await pyodide.runPythonAsync(`
 
 from io import StringIO
-import sys
-import micropip
-await micropip.install('matplotlib')
-await micropip.install('numpy')
-await micropip.install('tqdm')
-def tqdm(iterable, desc = ""): return list(iterable)
-
 # Rediriger stdout pour capturer les sorties
 sys.stdout = StringIO()
 
