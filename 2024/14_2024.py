@@ -20,10 +20,23 @@ class Point:
     
     def __eq__(self, other): return self.x == other.x and self.y == other.y
     
-def display(points):
-    map = [[" "] * X for _ in range(Y)]
-    for p in points: map[p.y][p.x] = "*"
-    print("\n".join("".join(row) for row in map))
+def display(points, ui = 0):
+    if not ui:
+        map = [[" "] * X for _ in range(Y)]
+        for p in points: map[p.y][p.x] = "*"
+        print("\n".join("".join(row) for row in map))
+    else:
+        import matplotlib.pyplot as plt
+        import warnings
+        warnings.filterwarnings("ignore", category = UserWarning)
+
+        x = [p.x for p in points]
+        y = [-p.y for p in points]
+        _, ax = plt.subplots(figsize = (5, 9))
+        ax.set_yticklabels([f"{abs(tick)}" for tick in y])
+        ax.set(title = "Christmas Tree", xlabel = "x", ylabel = "y")
+        ax.scatter(x, y, marker = "*", c = "green")
+        plt.show()
 
 def looks_like_sapin(points):
     for p in points:
@@ -61,4 +74,4 @@ while True:
         print("Part2:", count, "\n")
         break
 
-# display(the_map)
+display(the_map, ui = 1)
