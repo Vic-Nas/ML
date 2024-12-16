@@ -4,6 +4,6 @@
 
 Welcome, you can directly get the result of your output there:
 
-### [Vic AOC Solutions](https://vic-nas.github.io/Advent-of-code-python/)
+### [Page Title](https://vic-nas.github.io/Advent-of-code-python/)
 
 (Just so you know what you're looking for without seeing the code).
